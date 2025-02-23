@@ -1,70 +1,135 @@
-# Getting Started with Create React App
+# ScamSpot Backend Service
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A robust backend service for detecting and analyzing potential scams across different communication channels. The service implements multiple layers of analysis including URL risk assessment, sentiment analysis, image processing, and scam message detection.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **URL Risk Analysis**
+  - Multi-layered URL validation
+  - Integration with Google Safe Browsing API
+  - Machine learning-based URL classification
+  - Historical tracking of malicious URLs
 
-### `npm start`
+- **Message Analysis**
+  - Sentiment analysis using Azure Text Analytics
+  - Scam pattern detection using OpenAI GPT-4
+  - Decision tree-based message classification
+  - Conversation context analysis
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Image Processing**
+  - Support for JPEG, PNG, and GIF formats
+  - Message extraction from images
+  - Automated cleanup of processed files
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Authentication**
+  - Google OAuth integration
+  - Session management
+  - User profile handling
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or higher)
+- MongoDB
+- Azure Cognitive Services account
+- OpenAI API key
+- Google Cloud Platform account (for Safe Browsing API)
 
-### `npm run build`
+## Environment Variables
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```env
+OPENAI=your_openai_api_key
+MONGODB_URI=your_mongodb_connection_string
+AZURE_TEXT_ANALYTICS_KEY=your_azure_key
+AZURE_TEXT_ANALYTICS_ENDPOINT=your_azure_endpoint
+GOOGLE_SAFE_BROWSING_API_KEY=your_google_api_key
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository
+2. Install dependencies:
+```bash
+npm install
+```
+3. Set up environment variables
+4. Start the server:
+```bash
+npm start
+```
 
-### `npm run eject`
+## API Endpoints
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Authentication
+- `POST /auth/google-login` - Google OAuth login
+- `POST /auth/logout` - User logout
+- `GET /auth/profile` - Get user profile
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### URL Analysis
+- `POST /validate-url` - Analyze URLs for potential risks
+  ```json
+  {
+    "urls": [
+      {"url": "https://example.com"}
+    ]
+  }
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Image Analysis
+- `POST /analyze` - Process and analyze images for scam detection
+  - Accepts multipart/form-data with 'image' field
+  - Supports JPEG, PNG, GIF (max 5MB)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Security Features
 
-## Learn More
+- CORS protection with whitelisted origins
+- Session management with secure cookies
+- File upload restrictions and validation
+- Automated cleanup of processed files
+- Rate limiting (implementation required)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Architecture
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The service implements a multi-layered analysis approach:
 
-### Code Splitting
+1. **URL Analysis Pipeline**
+   - Local heuristic analysis
+   - Google Safe Browsing API check
+   - Machine learning classification
+   - Historical risk database
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. **Message Analysis Pipeline**
+   - Sentiment analysis
+   - Scam pattern detection
+   - Context-aware classification
+   - Final risk assessment
 
-### Analyzing the Bundle Size
+## Error Handling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The service implements comprehensive error handling with:
+- Input validation
+- API error management
+- File processing safeguards
+- Database operation error handling
 
-### Making a Progressive Web App
+## Database Schema
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The service uses MongoDB with the following main collections:
+- Users (authentication and profiles)
+- BadLinks (tracked malicious URLs)
+- Additional collections as needed
 
-### Advanced Configuration
+## Limitations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Maximum file size: 5MB for images
+- Supported image formats: JPEG, PNG, GIF
+- API rate limits may apply
+- Requires active internet connection for external API calls
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
