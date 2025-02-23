@@ -1,5 +1,6 @@
 # ScamSpot Backend Service
 
+Our chrome extension and backend code is placed in a zip file on the repository and needs to be unzipped in order to be viewed. Apologies
 A robust backend service for detecting and analyzing potential scams across different communication channels. The service implements multiple layers of analysis including URL risk assessment, sentiment analysis, image processing, and scam message detection.
 
 ## Features
